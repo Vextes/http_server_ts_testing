@@ -9,7 +9,16 @@ export async function handlerValidateChirps(req: Request, res: Response) {
     if (params.body.length > 140) {
         res.status(400).send({error: "Chirp is too long"})
     }
-    else {
-        res.status(200).send({valid: true});
+
+    const profanity = ["kerfuffle", "sharbert", "fornax"];
+    const censored = "****";
+    const wordList = params.body.split(' ');
+    for (const key in wordList) {
+        if (profanity.includes(wordList[key].toLowerCase())) {
+            wordList[key] = censored;
+        }
     }
+
+
+    res.status(200).send({cleanedBody: wordList.join(' ')});
 }
