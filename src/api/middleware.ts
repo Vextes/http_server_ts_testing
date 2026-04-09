@@ -17,3 +17,11 @@ export async function middlewareMetricsInc(req: Request, res: Response, next: Ne
     });
     next();
 }
+
+export function middlewareHandleError(err: Error, req: Request, res: Response, next: NextFunction) {
+    const errMessage = "Something went wrong on our end"
+    console.error(err.message);
+    res.status(500).json({
+        error: errMessage,
+    });
+}

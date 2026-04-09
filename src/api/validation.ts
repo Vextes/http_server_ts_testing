@@ -7,7 +7,7 @@ export async function handlerValidateChirps(req: Request, res: Response) {
     const params: parameters = req.body;
 
     if (params.body.length > 140) {
-        res.status(400).send({error: "Chirp is too long"})
+        throw new Error("Chirp is too long")
     }
 
     const profanity = ["kerfuffle", "sharbert", "fornax"];
@@ -18,7 +18,6 @@ export async function handlerValidateChirps(req: Request, res: Response) {
             wordList[key] = censored;
         }
     }
-
 
     res.status(200).send({cleanedBody: wordList.join(' ')});
 }
