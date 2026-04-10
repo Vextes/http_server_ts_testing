@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { config } from "../config.js"
+import { InvalidSumbissionError } from "./errors.js";
 
 export async function middlewareLogResponses(req: Request, res: Response, next: NextFunction) {
     res.on("finish", () => {
@@ -18,7 +19,18 @@ export async function middlewareMetricsInc(req: Request, res: Response, next: Ne
     next();
 }
 
-export function middlewareHandleError(err: Error, req: Request, res: Response, next: NextFunction) {
+export function middlewareHandleError(
+    err: Error,
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    if (err instanceof InvalidSumbissionError) {
+        res.status(400).json({
+            error: err.message,
+        });
+        return;
+    }
     const errMessage = "Something went wrong on our end"
     console.error(err.message);
     res.status(500).json({

@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import { InvalidSumbissionError } from "./errors.js";
 
 export async function handlerValidateChirps(req: Request, res: Response) {
     type parameters = {
@@ -7,7 +8,7 @@ export async function handlerValidateChirps(req: Request, res: Response) {
     const params: parameters = req.body;
 
     if (params.body.length > 140) {
-        throw new Error("Chirp is too long")
+        throw new InvalidSumbissionError("Chirp is too long. Max length is 140")
     }
 
     const profanity = ["kerfuffle", "sharbert", "fornax"];
